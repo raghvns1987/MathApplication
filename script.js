@@ -4,8 +4,27 @@ let gameState = {
     num2: 0,
     score: 0,
     gameActive: false,
-    userName: ''
+    userName: '',
+    operation: '' // 'addition' or 'subtraction'
 };
+
+// Select operation (addition or subtraction)
+function selectOperation(operation) {
+    gameState.operation = operation;
+
+    // Update subtitle
+    const subtitle = operation === 'addition' ? 'Addition Quest' : 'Subtraction Quest';
+    document.getElementById('subtitleText').textContent = subtitle;
+
+    // Show difficulty options
+    document.getElementById('difficultyLabel').style.display = 'block';
+    document.getElementById('digitOptions').style.display = 'flex';
+
+    // Highlight selected operation button
+    const buttons = document.querySelectorAll('.operation-btn');
+    buttons.forEach(btn => btn.style.opacity = '0.5');
+    event.target.closest('.operation-btn').style.opacity = '1';
+}
 
 // Setup the game
 function setupGame(digits, name = '') {
@@ -13,6 +32,12 @@ function setupGame(digits, name = '') {
     if (!name || name.trim() === '') {
         alert('Please enter your name to start!');
         document.getElementById('userName').focus();
+        return;
+    }
+
+    // Validate that operation is selected
+    if (!gameState.operation) {
+        alert('Please select an operation first!');
         return;
     }
 
@@ -32,22 +57,33 @@ function setupGame(digits, name = '') {
     document.getElementById('answerInput').focus();
 }
 
-// Generate a new addition problem
+// Generate a new problem (addition or subtraction)
 function generateProblem() {
     const maxNum = Math.pow(10, gameState.digits) - 1;
     const minNum = gameState.digits === 1 ? 0 : Math.pow(10, gameState.digits - 1);
 
-    gameState.num1 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
-    gameState.num2 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+    if (gameState.operation === 'addition') {
+        gameState.num1 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+        gameState.num2 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+    } else {
+        // For subtraction, ensure num1 >= num2 to avoid negative results
+        gameState.num1 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+        gameState.num2 = Math.floor(Math.random() * (gameState.num1 + 1));
+    }
 
     // Update display
     document.getElementById('num1').textContent = gameState.num1;
     document.getElementById('num2').textContent = gameState.num2;
 
+    // Update operator
+    const operator = gameState.operation === 'addition' ? '+' : '−';
+    document.querySelector('.operator').textContent = operator;
+
     // Clear input and feedback
     document.getElementById('answerInput').value = '';
     document.getElementById('feedback').classList.add('hidden');
     document.getElementById('celebrationModal').classList.add('hidden');
+    document.getElementById('incorrectModal').classList.add('hidden');
 
     // Re-animate numbers
     const num1Elem = document.getElementById('num1');
@@ -66,7 +102,9 @@ function generateProblem() {
 // Check the answer
 function checkAnswer() {
     const userAnswer = parseInt(document.getElementById('answerInput').value);
-    const correctAnswer = gameState.num1 + gameState.num2;
+    const correctAnswer = gameState.operation === 'addition'
+        ? gameState.num1 + gameState.num2
+        : gameState.num1 - gameState.num2;
     const feedbackElem = document.getElementById('feedback');
 
     if (isNaN(userAnswer)) {
@@ -173,23 +211,38 @@ function retryProblem() {
 
 // Show the correct answer
 function showCorrectAnswer() {
-    const correctAnswer = gameState.num1 + gameState.num2;
+    const correctAnswer = gameState.operation === 'addition'
+        ? gameState.num1 + gameState.num2
+        : gameState.num1 - gameState.num2;
+    const operator = gameState.operation === 'addition' ? '+' : '−';
     const answerDisplay = document.getElementById('correctAnswerDisplay');
-    answerDisplay.textContent = `The answer is: ${gameState.num1} + ${gameState.num2} = ${correctAnswer}`;
+    answerDisplay.textContent = `The answer is: ${gameState.num1} ${operator} ${gameState.num2} = ${correctAnswer}`;
     answerDisplay.classList.remove('hidden');
     document.querySelector('.show-answer-btn').style.display = 'none';
 }
 
+// Reset game
 // Reset game
 function resetGame() {
     // Show setup section, hide game section
     document.getElementById('setupSection').classList.remove('hidden');
     document.getElementById('gameSection').classList.add('hidden');
     document.getElementById('celebrationModal').classList.add('hidden');
+    document.getElementById('incorrectModal').classList.add('hidden');
 
     // Clear name input
     document.getElementById('userName').value = '';
-    document.getElementById('userName').focus();
+
+    // Hide difficulty options
+    document.getElementById('difficultyLabel').style.display = 'none';
+    document.getElementById('digitOptions').style.display = 'none';
+
+    // Reset operation button visibility
+    const buttons = document.querySelectorAll('.operation-btn');
+    buttons.forEach(btn => btn.style.opacity = '1');
+
+    // Reset subtitle
+    document.getElementById('subtitleText').textContent = 'Math Quest';
 
     // Reset game state
     gameState = {
@@ -198,8 +251,11 @@ function resetGame() {
         num2: 0,
         score: 0,
         gameActive: false,
-        userName: ''
+        userName: '',
+        operation: ''
     };
+
+    document.getElementById('userName').focus();
 }
 
 // Initialize

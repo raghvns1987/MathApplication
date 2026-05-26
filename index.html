@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎓 Math Adventure - Addition Quest</title>
+    <title>🎓 Math Adventure - Math Quest</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="header">
             <h1>🎓 Math Adventure</h1>
-            <p class="subtitle">Addition Quest</p>
+            <p class="subtitle" id="subtitleText">Math Quest</p>
         </div>
 
         <!-- Setup Section -->
@@ -26,9 +26,23 @@
                         autocomplete="off">
                 </div>
 
-                <p>Select how many digits you want for the addition problems:</p>
+                <p class="section-title">Select your operation:</p>
 
-                <div class="digit-options">
+                <div class="operation-options">
+                    <button class="operation-btn" onclick="selectOperation('addition')">
+                        <span class="operation-icon">➕</span>
+                        <span class="operation-label">Addition</span>
+                    </button>
+                    <button class="operation-btn" onclick="selectOperation('subtraction')">
+                        <span class="operation-icon">➖</span>
+                        <span class="operation-label">Subtraction</span>
+                    </button>
+                </div>
+
+                <p class="section-title" id="difficultyLabel" style="display:none;">Select how many digits you want for
+                    the problems:</p>
+
+                <div class="digit-options" id="digitOptions" style="display:none;">
                     <button class="digit-btn" onclick="setupGame(1, document.getElementById('userName').value)">
                         <span class="digit-icon">1️⃣</span>
                         <span class="digit-label">1 Digit</span>
