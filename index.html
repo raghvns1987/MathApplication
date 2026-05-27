@@ -95,6 +95,30 @@
                         <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider">
                     </div>
                 </div>
+
+                <!-- Visual Representation Toggle & Adjustment -->
+                <div class="visual-rep-controls">
+                    <div class="toggle-container">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="visualToggle" class="toggle-checkbox"
+                                onchange="toggleVisualRepresentation()" checked>
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-text">Show Counting Lines</span>
+                        </label>
+                    </div>
+                    <div class="line-size-control">
+                        <label for="lineSizeSlider">Line Size:</label>
+                        <input type="range" id="lineSizeSlider" min="20" max="80" value="40" class="line-size-slider"
+                            onchange="updateVisualRepresentation()">
+                    </div>
+                </div>
+
+                <!-- Visual Representation Tile -->
+                <div id="visualTile" class="visual-tile hidden">
+                    <div class="lines-container">
+                        <div id="linesDisplay" class="lines-display"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="input-section">

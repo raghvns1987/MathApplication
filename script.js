@@ -248,6 +248,77 @@ function generateProblem() {
 
     // Focus on input
     document.getElementById('answerInput').focus();
+
+    // Update visual representation if enabled
+    updateVisualRepresentation();
+}
+
+// Toggle visual representation
+function toggleVisualRepresentation() {
+    const visualTile = document.getElementById('visualTile');
+    const isChecked = document.getElementById('visualToggle').checked;
+
+    if (isChecked && gameState.digits === 1 && gameState.operation === 'addition') {
+        visualTile.classList.remove('hidden');
+        updateVisualRepresentation();
+    } else {
+        visualTile.classList.add('hidden');
+    }
+}
+
+// Update visual representation with lines
+function updateVisualRepresentation() {
+    const visualTile = document.getElementById('visualTile');
+    const isChecked = document.getElementById('visualToggle').checked;
+
+    // Only show for 1-digit addition
+    if (!isChecked || gameState.digits !== 1 || gameState.operation !== 'addition') {
+        visualTile.classList.add('hidden');
+        return;
+    }
+
+    visualTile.classList.remove('hidden');
+
+    const lineSize = document.getElementById('lineSizeSlider').value;
+    const linesDisplay = document.getElementById('linesDisplay');
+    linesDisplay.innerHTML = '';
+
+    // Create lines for first number
+    const group1 = document.createElement('div');
+    group1.className = 'line-group group-1';
+
+    for (let i = 0; i < gameState.num1; i++) {
+        const line = document.createElement('div');
+        line.className = 'vertical-line';
+        line.style.width = '3px';
+        line.style.height = lineSize + 'px';
+        group1.appendChild(line);
+    }
+
+    const label1 = document.createElement('div');
+    label1.className = 'line-group-label';
+    label1.textContent = gameState.num1;
+    group1.appendChild(label1);
+
+    // Create lines for second number
+    const group2 = document.createElement('div');
+    group2.className = 'line-group group-2';
+
+    for (let i = 0; i < gameState.num2; i++) {
+        const line = document.createElement('div');
+        line.className = 'vertical-line';
+        line.style.width = '3px';
+        line.style.height = lineSize + 'px';
+        group2.appendChild(line);
+    }
+
+    const label2 = document.createElement('div');
+    label2.className = 'line-group-label';
+    label2.textContent = gameState.num2;
+    group2.appendChild(label2);
+
+    linesDisplay.appendChild(group1);
+    linesDisplay.appendChild(group2);
 }
 
 // Check the answer
