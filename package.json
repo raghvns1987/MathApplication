@@ -1,0 +1,31 @@
+{
+    "name": "math-adventure",
+    "version": "1.0.0",
+    "description": "A kids-friendly web application to practice addition and subtraction with colorful animations",
+    "main": "index.html",
+    "scripts": {
+        "start": "Open index.html in a web browser",
+        "test": "No tests configured"
+    },
+    "keywords": [
+        "math",
+        "education",
+        "kids",
+        "addition",
+        "subtraction",
+        "web-app"
+    ],
+    "author": "",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/Math_app.git"
+    },
+    "browsers": {
+        "chrome": ">=90",
+        "firefox": ">=88",
+        "safari": ">=14",
+        "edge": ">=90"
+    },
+    "devDependencies": {}
+}
